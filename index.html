@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geri Sar</title>
-
+    <title>Geri Sar - Geri Sayım</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
@@ -18,11 +17,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0;
+            padding: 0;
         }
 
         .countdown-card {
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
             padding: 3rem 2rem;
@@ -76,14 +78,14 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6 text-center">
             
-       
+            <!-- Geri Sayım Kartı -->
             <div class="countdown-card">
                 <h1 class="countdown-title mb-4">GERİ SAR'ın Verdiği Süre</h1>
                 
-               
+             
                 <div class="d-flex justify-content-center gap-2 gap-sm-3 my-4" id="countdown-container">
                     
-                    <!-- Saat -->
+               
                     <div class="time-box">
                         <div class="time-num" id="hours">14</div>
                         <div class="time-label">Saat</div>
@@ -91,7 +93,7 @@
                     
                     <div class="separator">:</div>
                     
-                    <!-- Dakika -->
+           
                     <div class="time-box">
                         <div class="time-num" id="minutes">00</div>
                         <div class="time-label">Dakika</div>
@@ -99,7 +101,7 @@
                     
                     <div class="separator">:</div>
                     
-                    <!-- Saniye -->
+                  
                     <div class="time-box">
                         <div class="time-num" id="seconds">00</div>
                         <div class="time-label">Saniye</div>
@@ -107,7 +109,7 @@
                     
                 </div>
 
-                <!-- Süre Bittiğinde Görünecek Mesaj (Başlangıçta Gizli) -->
+               
                 <div id="expiry-message" class="alert alert-danger d-none fs-4 fw-bold rounded-3" role="alert">
                     Süre Doldu!
                 </div>
@@ -123,28 +125,39 @@
 
 
 <script>
+z
+    let targetTime = localStorage.getItem("countdown_target_14h");
 
-    const targetTime = new Date().getTime() + (14 * 60 * 60 * 1000);
+    if (!targetTime) {
+       
+        targetTime = new Date().getTime() + (14 * 60 * 60 * 1000);
+        localStorage.setItem("countdown_target_14h", targetTime);
+    } else {
+   
+        targetTime = parseInt(targetTime);
+    }
 
     const countdownInterval = setInterval(function() {
         const now = new Date().getTime();
         const difference = targetTime - now;
 
-      
+     
         const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-     
+      
         document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
         document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
         document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
 
-        
+      
         if (difference < 0) {
             clearInterval(countdownInterval);
             document.getElementById("countdown-container").classList.add("d-none");
             document.getElementById("expiry-message").classList.remove("d-none");
+            // Süre bittiğinde hafızayı temizle
+            localStorage.removeItem("countdown_target_14h");
         }
     }, 1000);
 </script>
